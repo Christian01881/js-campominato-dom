@@ -18,6 +18,7 @@ footer{
     width: 100%;
     height: calc(100vh - 160px);
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: var(--bg-section);
@@ -33,12 +34,15 @@ footer{
     display: flex;
     justify-content: center;
     align-items: center;
+    color: transparent;
 }
 
-.CPM-bg-green{
-    background-color: green;
+.CPM-bg-blue{
+    background-color: blue;
+    color: transparent;
 }
 
 .CPM-bg-Bombs{
     background-color: red;
+    color: white;
 }

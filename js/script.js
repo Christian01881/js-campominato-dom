@@ -13,7 +13,7 @@ Aggiungere una select accanto al bottone di generazione, che fornisca una scelta
 
 // Creo un Event submit che mi permette di selezionare il livello:
 function genBombs(cellNumbers){
-    const NUM_BOMBS = 16;
+    const NUM_BOMBS = 15;
     const bombs = [];
     b = 0;
     while(bombs.length < NUM_BOMBS){
@@ -26,11 +26,22 @@ function genBombs(cellNumbers){
     }
     return bombs;
 }
+
+function setMessage(message){
+    const score = document.getElementById('score');
+    score.innerHTML = message;
+}
+
+
 function play(e) {
     e.preventDefault();
     const difficulty = document.getElementById('Difficulty').value;
-    console.log(difficulty);
+    // console.log(difficulty);
 
+    let message = 'Seleziona la difficoltà e premi play!';
+    setMessage(message);
+    let score = 0;
+    let gameOver = false;
 // Creo uno switch che cambia il numero di celle in base alla difficoltà:
     let cellNumbers;
     switch(difficulty){
@@ -43,12 +54,17 @@ function play(e) {
         case 'Hard':
             cellNumbers = 49;
             break;
+        case 'Dea Bendata':
+            cellNumbers = 16;
+            break
     };
     const bomb = genBombs(cellNumbers);
-    console.log(bomb);
-    console.log(cellNumbers);
+    // console.log(bomb);
+    // console.log(cellNumbers);
     let cellPerRow = Math.sqrt(cellNumbers);
-    console.log(cellPerRow);
+    // console.log(cellPerRow);
+    const NUM_BOMBS = 15;
+    let maxScore = cellNumbers - NUM_BOMBS;
 
 // Creo un ciclo for per generare la scacchiera:
     const cellBox = document.querySelector('.CPM-box');
@@ -64,12 +80,25 @@ function play(e) {
 
 // Creo un evento che cambia il colore delle celle al click:
         cell.addEventListener('click', function(){
-            if(bomb.includes(parseInt(cell.innerText)) === true){
-                for(j = 0; j < bomb.length; j++){
-                    if(bomb[j] === parseInt(cell.innerText)) cell.classList.add('CPM-bg-Bombs')
-                    console.log(bomb[j])
-                }   
-            }   
+            if(!gameOver && !this.classList.contains('CPM-bg-blue')){
+                if(bomb.includes(parseInt(this.innerText))){
+                    this.classList.add('CPM-bg-Bombs');
+                    message = `Hai perso! Ma hai totalizzato: ${score} punti`;
+                    gameOver = true;
+                    const cells = document.querySelectorAll('.CPM-cell');
+                    for(let cell of cells){
+                        if (bomb.includes(parseInt(cell.innerText))){
+                            cell.classList.add('CPM-bg-Bombs')
+                            cell.innerHTML = '<i class="fa-solid fa-bomb fs-4"></i>';
+                        }
+                    }
+                } else{
+                    this.classList.add('CPM-bg-blue');
+                    score++;
+                    message = score === maxScore ? `Hai vinto! Hai totalizzato: ${score} punti` : `Il tuo punteggio è: ${score}`;
+                }
+                setMessage(message);
+            }
         });
     };
 };
